@@ -16,7 +16,7 @@ RUN apt-get update -qq && apt-get install -y \
 # Set working directory
 WORKDIR /app
 
-# Install Yarn via npm (use a recent version)
+# Install Yarn via npm
 RUN npm install -g yarn@1.22.22
 
 # Stage for installing Ruby and Node.js dependencies
@@ -44,8 +44,8 @@ COPY --from=dependencies /app/node_modules /app/node_modules
 # Copy the rest of the application code
 COPY . .
 
-# Precompile assets (for Rails with Tailwind CSS)
-RUN bundle exec rake assets:precompile
+# Clean asset cache and precompile assets
+RUN rm -rf tmp/cache public/assets && bundle exec rake assets:precompile
 
 # Expose port 3000 (default for Rails)
 EXPOSE 3000

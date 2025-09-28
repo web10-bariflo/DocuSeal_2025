@@ -1,21 +1,22 @@
 services:
   app:
+    build:
+      context: .
+      dockerfile: Dockerfile
     depends_on:
       postgres:
         condition: service_healthy
-    image: docuseal/docuseal:latest
     ports:
       - 3000:3000
-    volumes:
-      - ./docuseal:/data/docuseal
     environment:
+      - RAILS_ENV=production
       - FORCE_SSL=${HOST}
       - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/docuseal
 
   postgres:
     image: postgres:15
     volumes:
-      - './pg_data:/var/lib/postgresql/data'
+      - ./pg_data:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
@@ -34,6 +35,6 @@ services:
       - 443:443
       - 443:443/udp
     volumes:
-      - .:/data
+      - ./caddy:/etc/caddy
     environment:
       - HOST=${HOST}
