@@ -123,4 +123,15 @@ class ApplicationController < ActionController::Base
 
     redirect_to request.url.gsub('.co/', '.com/'), allow_other_host: true, status: :moved_permanently
   end
+
+  def logo
+    # Simple SVG logo to prevent 404 errors
+    svg_content = '<?xml version="1.0" encoding="UTF-8"?>
+      <svg width="100" height="40" xmlns="http://www.w3.org/2000/svg">
+        <rect width="100" height="40" fill="#3B82F6" rx="5"/>
+        <text x="50" y="25" text-anchor="middle" fill="white" font-family="Arial" font-size="14" font-weight="bold">DocuSeal</text>
+      </svg>'
+    
+    render plain: svg_content, content_type: 'image/svg+xml'
+  end
 end

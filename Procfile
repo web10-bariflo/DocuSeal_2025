@@ -1,1 +1,2 @@
-web: puma -p $PORT -C ./config/puma.rb
+web: rails server -b 0.0.0.0 -p 3000
+assets: bin/shakapacker-dev-server

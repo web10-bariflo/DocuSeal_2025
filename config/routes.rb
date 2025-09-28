@@ -3,6 +3,8 @@
 Rails.application.routes.draw do
   mount LetterOpenerWeb::Engine, at: '/letter_opener' if Rails.env.development?
 
+  get '/logo.svg', to: 'application#logo', defaults: { format: 'svg' }
+
   if !Docuseal.multitenant? && defined?(Sidekiq::Web)
     authenticated :user, ->(u) { u.sidekiq? } do
       mount Sidekiq::Web => '/jobs'

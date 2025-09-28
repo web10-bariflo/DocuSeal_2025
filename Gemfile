@@ -76,3 +76,4 @@ group :test do
   gem 'cuprite'
   gem 'webmock'
 end
+gem 'redis'

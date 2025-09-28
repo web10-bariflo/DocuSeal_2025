@@ -15,12 +15,12 @@
 #
 # Indexes
 #
-#  index_search_entries_on_account_id_ngram_submission     (account_id,ngram) WHERE ((record_type)::text = 'Submission'::text) USING gin
-#  index_search_entries_on_account_id_ngram_submitter      (account_id,ngram) WHERE ((record_type)::text = 'Submitter'::text) USING gin
-#  index_search_entries_on_account_id_ngram_template       (account_id,ngram) WHERE ((record_type)::text = 'Template'::text) USING gin
-#  index_search_entries_on_account_id_tsvector_submission  (account_id,tsvector) WHERE ((record_type)::text = 'Submission'::text) USING gin
-#  index_search_entries_on_account_id_tsvector_submitter   (account_id,tsvector) WHERE ((record_type)::text = 'Submitter'::text) USING gin
-#  index_search_entries_on_account_id_tsvector_template    (account_id,tsvector) WHERE ((record_type)::text = 'Template'::text) USING gin
+#  index_search_entries_on_account_id_ngram_submission     (tsvector) WHERE ((record_type)::text = 'Submission'::text) USING gin
+#  index_search_entries_on_account_id_ngram_submitter      (tsvector) WHERE ((record_type)::text = 'Submitter'::text) USING gin
+#  index_search_entries_on_account_id_ngram_template       (tsvector) WHERE ((record_type)::text = 'Template'::text) USING gin
+#  index_search_entries_on_account_id_tsvector_submission  (tsvector) WHERE ((record_type)::text = 'Submission'::text) USING gin
+#  index_search_entries_on_account_id_tsvector_submitter   (tsvector) WHERE ((record_type)::text = 'Submitter'::text) USING gin
+#  index_search_entries_on_account_id_tsvector_template    (tsvector) WHERE ((record_type)::text = 'Template'::text) USING gin
 #  index_search_entries_on_record_id_and_record_type       (record_id,record_type) UNIQUE
 #
 class SearchEntry < ApplicationRecord

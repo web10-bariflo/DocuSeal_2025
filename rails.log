@@ -1,0 +1,84 @@
+nohup: ignoring input
+WARNING: Nokogiri was built against libxml version 2.13.8, but has dynamically loaded 2.9.14
+=> Booting Puma
+=> Rails 8.0.2.1 application starting in development 
+=> Run `bin/rails server --help` for more startup options
+Puma starting in single mode...
+* Puma version: 6.5.0 ("Sky's Version")
+* Ruby version: ruby 3.4.2 (2025-02-15 revision d2930f8e7a) +PRISM [x86_64-linux]
+*  Min threads: 0
+*  Max threads: 15
+*  Environment: development
+*          PID: 22619
+* Listening on http://0.0.0.0:3000
+Use Ctrl-C to stop
+2025-09-27T06:39:41.371Z pid=22619 tid=d8b INFO: Sidekiq 7.3.7 connecting to Redis with options {size: 10, pool_name: "internal", url: "redis://default:REDACTED@0.0.0.0:6379/0"}
+2025-09-27T06:39:41.373Z pid=22619 tid=daz INFO: Sidekiq 7.3.7 connecting to Redis with options {size: 5, pool_name: "default", url: "redis://default:REDACTED@0.0.0.0:6379/0"}
+2025-09-27T06:39:41.373Z pid=22619 tid=dar INFO: Sidekiq 7.3.7 connecting to Redis with options {size: 5, pool_name: "default", url: "redis://default:REDACTED@0.0.0.0:6379/0"}
+2025-09-27T06:39:41.373Z pid=22619 tid=daj INFO: Sidekiq 7.3.7 connecting to Redis with options {size: 5, pool_name: "default", url: "redis://default:REDACTED@0.0.0.0:6379/0"}
+2025-09-27T06:39:41.373Z pid=22619 tid=dab INFO: Sidekiq 7.3.7 connecting to Redis with options {size: 5, pool_name: "default", url: "redis://default:REDACTED@0.0.0.0:6379/0"}
+2025-09-27T06:39:41.374Z pid=22619 tid=dbv INFO: Sidekiq 7.3.7 connecting to Redis with options {size: 5, pool_name: "default", url: "redis://default:REDACTED@0.0.0.0:6379/0"}
+Started HEAD "/" for 127.0.0.1 at 2025-09-27 12:09:46 +0530
+Processing by DashboardController#index as */*
+  [1m[36mUser Exists? (0.5ms)[0m  [1m[34mSELECT 1 AS one FROM "users" LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ activerecord (8.0.2.1) lib/active_record/log_subscriber.rb:122:in 'ActiveRecord::LogSubscriber#log_query_source'
+  Rendering layout layouts/application.html.erb
+  Rendering pages/landing.html.erb within layouts/application
+  Rendered shared/_logo.html.erb (Duration: 1.1ms | GC: 0.0ms)
+  Rendered icons/_brand_docker.html.erb (Duration: 0.6ms | GC: 0.0ms)
+  Rendered icons/_devices.html.erb (Duration: 0.6ms | GC: 0.2ms)
+  Rendered icons/_shield_check.html.erb (Duration: 0.4ms | GC: 0.0ms)
+  Rendered icons/_brand_github.html.erb (Duration: 0.4ms | GC: 0.0ms)
+  [1m[36mCompletedSubmitter Count (0.9ms)[0m  [1m[34mSELECT COUNT(DISTINCT "completed_submitters"."submission_id") FROM "completed_submitters"[0m
+  ↳ activerecord (8.0.2.1) lib/active_record/log_subscriber.rb:122:in 'ActiveRecord::LogSubscriber#log_query_source'
+  Rendered shared/_powered_by.html.erb (Duration: 251.3ms | GC: 41.4ms)
+  Rendered shared/_attribution.html.erb (Duration: 251.9ms | GC: 41.4ms)
+  Rendered pages/landing.html.erb within layouts/application (Duration: 260.1ms | GC: 41.6ms)
+  [1m[36mEncryptedConfig Load (0.8ms)[0m  [1m[34mSELECT "encrypted_configs".* FROM "encrypted_configs" WHERE "encrypted_configs"."key" = $1 LIMIT $2[0m  [["key", "app_url"], ["LIMIT", 1]]
+  ↳ activerecord (8.0.2.1) lib/active_record/log_subscriber.rb:122:in 'ActiveRecord::LogSubscriber#log_query_source'
+  Rendered shared/_meta.html.erb (Duration: 82.3ms | GC: 0.0ms)
+  Rendered layouts/_head_tags.html.erb (Duration: 83.6ms | GC: 0.0ms)
+  Rendered shared/_navbar_warning.html.erb (Duration: 0.3ms | GC: 0.0ms)
+  Rendered shared/_logo.html.erb (Duration: 0.8ms | GC: 0.0ms)
+  Rendered shared/_title.html.erb (Duration: 1.5ms | GC: 0.0ms)
+  Rendered icons/_login.html.erb (Duration: 0.5ms | GC: 0.0ms)
+  Rendered shared/_navbar.html.erb (Duration: 7.1ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 360.6ms | GC: 41.6ms)
+Filter chain halted as :maybe_render_landing rendered or redirected
+Completed 200 OK in 402ms (Views: 359.2ms | ActiveRecord: 17.3ms (3 queries, 0 cached) | GC: 42.7ms)
+
+
+Started GET "/" for 127.0.0.1 at 2025-09-27 12:09:51 +0530
+Processing by DashboardController#index as */*
+  [1m[36mUser Exists? (1.8ms)[0m  [1m[34mSELECT 1 AS one FROM "users" LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ activerecord (8.0.2.1) lib/active_record/log_subscriber.rb:122:in 'ActiveRecord::LogSubscriber#log_query_source'
+  Rendering layout layouts/application.html.erb
+  Rendering pages/landing.html.erb within layouts/application
+  Rendered shared/_logo.html.erb (Duration: 0.1ms | GC: 0.0ms)
+  Rendered icons/_brand_docker.html.erb (Duration: 0.0ms | GC: 0.0ms)
+  Rendered icons/_devices.html.erb (Duration: 0.0ms | GC: 0.0ms)
+  Rendered icons/_shield_check.html.erb (Duration: 0.0ms | GC: 0.0ms)
+  Rendered icons/_brand_github.html.erb (Duration: 0.0ms | GC: 0.0ms)
+  [1m[36mCompletedSubmitter Count (0.2ms)[0m  [1m[34mSELECT COUNT(DISTINCT "completed_submitters"."submission_id") FROM "completed_submitters"[0m
+  ↳ activerecord (8.0.2.1) lib/active_record/log_subscriber.rb:122:in 'ActiveRecord::LogSubscriber#log_query_source'
+  Rendered shared/_powered_by.html.erb (Duration: 0.9ms | GC: 0.0ms)
+  Rendered shared/_attribution.html.erb (Duration: 1.1ms | GC: 0.0ms)
+  Rendered pages/landing.html.erb within layouts/application (Duration: 3.1ms | GC: 0.0ms)
+  Rendered shared/_meta.html.erb (Duration: 0.4ms | GC: 0.0ms)
+  Rendered layouts/_head_tags.html.erb (Duration: 0.7ms | GC: 0.0ms)
+  Rendered shared/_navbar_warning.html.erb (Duration: 0.0ms | GC: 0.0ms)
+  Rendered shared/_logo.html.erb (Duration: 0.0ms | GC: 0.0ms)
+  Rendered shared/_title.html.erb (Duration: 0.2ms | GC: 0.0ms)
+  Rendered icons/_login.html.erb (Duration: 0.0ms | GC: 0.0ms)
+  Rendered shared/_navbar.html.erb (Duration: 1.2ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 8.7ms | GC: 0.0ms)
+Filter chain halted as :maybe_render_landing rendered or redirected
+Completed 200 OK in 14ms (Views: 8.9ms | ActiveRecord: 1.9ms (2 queries, 0 cached) | GC: 0.0ms)
+
+
+2025-09-27T06:39:51.373Z pid=22619 tid=3ob INFO: Terminating quiet threads for default capsule
+2025-09-27T06:39:51.373Z pid=22619 tid=d5v INFO: Scheduler exiting...
+- Gracefully stopping, waiting for requests to finish
+=== puma shutdown: 2025-09-27 12:09:51 +0530 ===
+- Goodbye!
+Exiting

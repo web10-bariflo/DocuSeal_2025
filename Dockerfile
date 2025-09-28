@@ -1,95 +1,54 @@
-FROM ruby:3.4.2-alpine AS download
+# Use Ruby 3.4.2 base image
+FROM ruby:3.4.2-slim AS base
 
-WORKDIR /fonts
+# Install system dependencies for Ruby, Node.js, PostgreSQL, MySQL, Git, and libvips
+RUN apt-get update -qq && apt-get install -y \
+    build-essential \
+    libpq-dev \
+    libyaml-dev \
+    libmariadb-dev \
+    libvips-dev \
+    nodejs \
+    npm \
+    git \
+    && rm -rf /var/lib/apt/lists/*
 
-RUN apk --no-cache add fontforge wget && \
-    wget https://github.com/satbyy/go-noto-universal/releases/download/v7.0/GoNotoKurrent-Regular.ttf && \
-    wget https://github.com/satbyy/go-noto-universal/releases/download/v7.0/GoNotoKurrent-Bold.ttf && \
-    wget https://github.com/impallari/DancingScript/raw/master/fonts/DancingScript-Regular.otf && \
-    wget https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSansSymbols2/hinted/ttf/NotoSansSymbols2-Regular.ttf && \
-    wget https://github.com/Maxattax97/gnu-freefont/raw/master/ttf/FreeSans.ttf && \
-    wget https://github.com/impallari/DancingScript/raw/master/OFL.txt && \
-    wget -O pdfium-linux.tgz "https://github.com/docusealco/pdfium-binaries/releases/latest/download/pdfium-linux-$(uname -m | sed 's/x86_64/x64/;s/aarch64/arm64/').tgz" && \
-    mkdir -p /pdfium-linux && \
-    tar -xzf pdfium-linux.tgz -C /pdfium-linux
-
-RUN fontforge -lang=py -c 'font1 = fontforge.open("FreeSans.ttf"); font2 = fontforge.open("NotoSansSymbols2-Regular.ttf"); font1.mergeFonts(font2); font1.generate("FreeSans.ttf")'
-
-FROM ruby:3.4.2-alpine AS webpack
-
-ENV RAILS_ENV=production
-ENV NODE_ENV=production
-
+# Set working directory
 WORKDIR /app
 
-RUN apk add --no-cache nodejs yarn git build-base && \
-    gem install shakapacker
+# Install Yarn via npm (use a recent version)
+RUN npm install -g yarn@1.22.22
 
-COPY ./package.json ./yarn.lock ./
+# Stage for installing Ruby and Node.js dependencies
+FROM base AS dependencies
 
-RUN yarn install --network-timeout 1000000
+# Copy Gemfile and Gemfile.lock for Ruby dependencies
+COPY Gemfile Gemfile.lock ./
 
-COPY ./bin/shakapacker ./bin/shakapacker
-COPY ./config/webpack ./config/webpack
-COPY ./config/shakapacker.yml ./config/shakapacker.yml
-COPY ./postcss.config.js ./postcss.config.js
-COPY ./tailwind.config.js ./tailwind.config.js
-COPY ./tailwind.form.config.js ./tailwind.form.config.js
-COPY ./tailwind.application.config.js ./tailwind.application.config.js
-COPY ./app/javascript ./app/javascript
-COPY ./app/views ./app/views
+# Install Ruby gems with the correct Bundler version
+RUN gem install bundler -v 2.5.3 && bundle install --jobs 4 --retry 3
 
-RUN echo "gem 'shakapacker'" > Gemfile && ./bin/shakapacker
+# Copy package.json and yarn.lock for Node.js dependencies
+COPY package.json yarn.lock ./
 
-FROM ruby:3.4.2-alpine AS app
+# Install Node.js dependencies with increased network timeout
+RUN yarn install --network-timeout 100000
 
-ENV RAILS_ENV=production
-ENV BUNDLE_WITHOUT="development:test"
-ENV LD_PRELOAD=/lib/libgcompat.so.0
-ENV OPENSSL_CONF=/app/openssl_legacy.cnf
+# Final stage for the application
+FROM base
 
-WORKDIR /app
+# Copy installed dependencies from the dependencies stage
+COPY --from=dependencies /usr/local/bundle /usr/local/bundle
+COPY --from=dependencies /app/node_modules /app/node_modules
 
-RUN echo '@edge https://dl-cdn.alpinelinux.org/alpine/edge/community' >> /etc/apk/repositories && apk add --no-cache sqlite-dev libpq-dev mariadb-dev vips-dev@edge yaml-dev redis libheif@edge vips-heif@edge gcompat ttf-freefont && mkdir /fonts && rm /usr/share/fonts/freefont/FreeSans.otf
+# Copy the rest of the application code
+COPY . .
 
-RUN echo $'.include = /etc/ssl/openssl.cnf\n\
-\n\
-[provider_sect]\n\
-default = default_sect\n\
-legacy = legacy_sect\n\
-\n\
-[default_sect]\n\
-activate = 1\n\
-\n\
-[legacy_sect]\n\
-activate = 1' >> /app/openssl_legacy.cnf
+# Precompile assets (for Rails with Tailwind CSS)
+RUN bundle exec rake assets:precompile
 
-COPY ./Gemfile ./Gemfile.lock ./
-
-RUN apk add --no-cache build-base && bundle install && apk del --no-cache build-base && rm -rf ~/.bundle /usr/local/bundle/cache && ruby -e "puts Dir['/usr/local/bundle/**/{spec,rdoc,resources/shared,resources/collation,resources/locales}']" | xargs rm -rf
-
-COPY ./bin ./bin
-COPY ./app ./app
-COPY ./config ./config
-COPY ./db/migrate ./db/migrate
-COPY ./log ./log
-COPY ./lib ./lib
-COPY ./public ./public
-COPY ./tmp ./tmp
-COPY LICENSE README.md Rakefile config.ru .version ./
-COPY .version ./public/version
-
-COPY --from=download /fonts/GoNotoKurrent-Regular.ttf /fonts/GoNotoKurrent-Bold.ttf /fonts/DancingScript-Regular.otf /fonts/OFL.txt /fonts
-COPY --from=download /fonts/FreeSans.ttf /usr/share/fonts/freefont
-COPY --from=download /pdfium-linux/lib/libpdfium.so /usr/lib/libpdfium.so
-COPY --from=download /pdfium-linux/licenses/pdfium.txt /usr/lib/libpdfium-LICENSE.txt
-COPY --from=webpack /app/public/packs ./public/packs
-
-RUN ln -s /fonts /app/public/fonts
-RUN bundle exec bootsnap precompile --gemfile app/ lib/
-
-WORKDIR /data/docuseal
-ENV WORKDIR=/data/docuseal
-
+# Expose port 3000 (default for Rails)
 EXPOSE 3000
-CMD ["/app/bin/bundle", "exec", "puma", "-C", "/app/config/puma.rb", "--dir", "/app"]
+
+# Command to start the Rails server
+CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0"]

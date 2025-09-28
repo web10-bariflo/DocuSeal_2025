@@ -12,13 +12,12 @@
 
 ActiveRecord::Schema[8.0].define(version: 2025_09_22_053744) do
   # These are extensions that must be enabled in order to support this database
-  enable_extension "btree_gin"
-  enable_extension "plpgsql"
+  enable_extension "pg_catalog.plpgsql"
 
   create_table "access_tokens", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.text "token", null: false
-    t.text "sha256", null: false
+    t.string "sha256", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["sha256"], name: "index_access_tokens_on_sha256", unique: true
@@ -276,13 +275,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_22_053744) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.tsvector "ngram"
-    t.index ["account_id", "ngram"], name: "index_search_entries_on_account_id_ngram_submission", where: "((record_type)::text = 'Submission'::text)", using: :gin
-    t.index ["account_id", "ngram"], name: "index_search_entries_on_account_id_ngram_submitter", where: "((record_type)::text = 'Submitter'::text)", using: :gin
-    t.index ["account_id", "ngram"], name: "index_search_entries_on_account_id_ngram_template", where: "((record_type)::text = 'Template'::text)", using: :gin
-    t.index ["account_id", "tsvector"], name: "index_search_entries_on_account_id_tsvector_submission", where: "((record_type)::text = 'Submission'::text)", using: :gin
-    t.index ["account_id", "tsvector"], name: "index_search_entries_on_account_id_tsvector_submitter", where: "((record_type)::text = 'Submitter'::text)", using: :gin
-    t.index ["account_id", "tsvector"], name: "index_search_entries_on_account_id_tsvector_template", where: "((record_type)::text = 'Template'::text)", using: :gin
     t.index ["record_id", "record_type"], name: "index_search_entries_on_record_id_and_record_type", unique: true
+    t.index ["tsvector"], name: "index_search_entries_on_account_id_ngram_submission", where: "((record_type)::text = 'Submission'::text)", using: :gin
+    t.index ["tsvector"], name: "index_search_entries_on_account_id_ngram_submitter", where: "((record_type)::text = 'Submitter'::text)", using: :gin
+    t.index ["tsvector"], name: "index_search_entries_on_account_id_ngram_template", where: "((record_type)::text = 'Template'::text)", using: :gin
+    t.index ["tsvector"], name: "index_search_entries_on_account_id_tsvector_submission", where: "((record_type)::text = 'Submission'::text)", using: :gin
+    t.index ["tsvector"], name: "index_search_entries_on_account_id_tsvector_submitter", where: "((record_type)::text = 'Submitter'::text)", using: :gin
+    t.index ["tsvector"], name: "index_search_entries_on_account_id_tsvector_template", where: "((record_type)::text = 'Template'::text)", using: :gin
   end
 
   create_table "submission_events", force: :cascade do |t|

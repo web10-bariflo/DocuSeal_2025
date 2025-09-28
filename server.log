@@ -1,0 +1,47 @@
+nohup: ignoring input
+WARNING: Nokogiri was built against libxml version 2.13.8, but has dynamically loaded 2.9.14
+=> Booting Puma
+=> Rails 8.0.2.1 application starting in development 
+=> Run `bin/rails server --help` for more startup options
+Puma starting in single mode...
+* Puma version: 6.5.0 ("Sky's Version")
+* Ruby version: ruby 3.4.2 (2025-02-15 revision d2930f8e7a) +PRISM [x86_64-linux]
+*  Min threads: 0
+*  Max threads: 15
+*  Environment: development
+*          PID: 303447
+* Listening on http://0.0.0.0:3000
+Use Ctrl-C to stop
+2025-09-27T12:37:25.038Z pid=303447 tid=6nef INFO: Sidekiq 7.3.7 connecting to Redis with options {size: 10, pool_name: "internal", url: "redis://default:REDACTED@0.0.0.0:6379/0"}
+2025-09-27T12:37:25.040Z pid=303447 tid=6n2v INFO: Sidekiq 7.3.7 connecting to Redis with options {size: 5, pool_name: "default", url: "redis://default:REDACTED@0.0.0.0:6379/0"}
+2025-09-27T12:37:25.040Z pid=303447 tid=6n33 INFO: Sidekiq 7.3.7 connecting to Redis with options {size: 5, pool_name: "default", url: "redis://default:REDACTED@0.0.0.0:6379/0"}
+2025-09-27T12:37:25.040Z pid=303447 tid=6n2f INFO: Sidekiq 7.3.7 connecting to Redis with options {size: 5, pool_name: "default", url: "redis://default:REDACTED@0.0.0.0:6379/0"}
+2025-09-27T12:37:25.040Z pid=303447 tid=6n2n INFO: Sidekiq 7.3.7 connecting to Redis with options {size: 5, pool_name: "default", url: "redis://default:REDACTED@0.0.0.0:6379/0"}
+2025-09-27T12:37:25.040Z pid=303447 tid=6n3r INFO: Sidekiq 7.3.7 connecting to Redis with options {size: 5, pool_name: "default", url: "redis://default:REDACTED@0.0.0.0:6379/0"}
+Started HEAD "/" for 127.0.0.1 at 2025-09-27 18:07:30 +0530
+Processing by DashboardController#index as */*
+  [1m[36mUser Exists? (0.7ms)[0m  [1m[34mSELECT 1 AS one FROM "users" LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ activerecord (8.0.2.1) lib/active_record/log_subscriber.rb:122:in 'ActiveRecord::LogSubscriber#log_query_source'
+  Rendering layout layouts/application.html.erb
+  Rendering pages/landing.html.erb within layouts/application
+  Rendered pages/landing.html.erb within layouts/application (Duration: 0.7ms | GC: 0.0ms)
+  [1m[36mEncryptedConfig Load (1.5ms)[0m  [1m[34mSELECT "encrypted_configs".* FROM "encrypted_configs" WHERE "encrypted_configs"."key" = $1 LIMIT $2[0m  [["key", "app_url"], ["LIMIT", 1]]
+  ↳ activerecord (8.0.2.1) lib/active_record/log_subscriber.rb:122:in 'ActiveRecord::LogSubscriber#log_query_source'
+  Rendered shared/_meta.html.erb (Duration: 89.9ms | GC: 0.0ms)
+  Rendered layouts/_head_tags.html.erb (Duration: 93.3ms | GC: 0.0ms)
+  Rendered shared/_navbar_warning.html.erb (Duration: 1.4ms | GC: 0.0ms)
+  Rendered shared/_logo.html.erb (Duration: 0.6ms | GC: 0.0ms)
+  Rendered shared/_title.html.erb (Duration: 1.7ms | GC: 0.0ms)
+  Rendered icons/_login.html.erb (Duration: 0.8ms | GC: 0.0ms)
+  Rendered shared/_navbar.html.erb (Duration: 326.6ms | GC: 53.1ms)
+  Rendered layout layouts/application.html.erb (Duration: 428.4ms | GC: 53.1ms)
+Filter chain halted as :maybe_render_landing rendered or redirected
+Completed 200 OK in 499ms (Views: 428.1ms | ActiveRecord: 23.0ms (2 queries, 0 cached) | GC: 53.1ms)
+
+
+2025-09-27T12:37:35.025Z pid=303447 tid=6wpr INFO: Terminating quiet threads for default capsule
+2025-09-27T12:37:35.027Z pid=303447 tid=6ncf INFO: Scheduler exiting...
+- Gracefully stopping, waiting for requests to finish
+=== puma shutdown: 2025-09-27 18:07:35 +0530 ===
+- Goodbye!
+Exiting
