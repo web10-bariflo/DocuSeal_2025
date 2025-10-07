@@ -1,3 +1,21 @@
+# Exclude directories/files not needed for image build
+caddy
+pg_data
+node_modules
+log
+tmp
+spec
+.git
+.gitignore
+Dockerfile*
+docker-compose*.yml
+README.md
+LICENSE
+rails.log
+server.log
+server_output.log
+Procfile*
+
 /db/*.sqlite3
 
 **/node_modules

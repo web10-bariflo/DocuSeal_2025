@@ -8,10 +8,22 @@ RUN apt-get update -qq && apt-get install -y \
     libyaml-dev \
     libmariadb-dev \
     libvips-dev \
+    postgresql-client \
+    wget \
+    ca-certificates \
     nodejs \
     npm \
     git \
     && rm -rf /var/lib/apt/lists/*
+
+# Install PDFium runtime library (libpdfium.so)
+RUN set -eux; \
+    wget -q https://github.com/bblanchon/pdfium-binaries/releases/latest/download/pdfium-linux-x64.tgz -O /tmp/pdfium.tgz; \
+    tar -xzf /tmp/pdfium.tgz -C /tmp; \
+    if [ -f /tmp/pdfium/lib/libpdfium.so ]; then cp /tmp/pdfium/lib/libpdfium.so /usr/lib/; \
+    elif [ -f /tmp/lib/libpdfium.so ]; then cp /tmp/lib/libpdfium.so /usr/lib/; \
+    else echo "libpdfium.so not found in downloaded archive" && exit 1; fi; \
+    rm -rf /tmp/pdfium*;
 
 # Set working directory
 WORKDIR /app

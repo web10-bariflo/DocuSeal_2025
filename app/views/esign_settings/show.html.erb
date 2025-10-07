@@ -1,4 +1,4 @@
-<div class="flex-wrap space-y-4 md:flex md:flex-nowrap md:space-y-0 md:space-x-10">
+  <div class="flex-wrap space-y-4 md:flex md:flex-nowrap md:space-y-0 md:space-x-10">
   <%= render 'shared/settings_nav' %>
   <div class="md:flex-grow">
     <div class="max-w-xl">
@@ -69,40 +69,7 @@
             </th>
           </tr>
         </thead>
-        <tbody>
-          <% @pkcs_list.each do |item| %>
-            <% next if item['pkcs'].blank? %>
-            <tr scope="row" class="group">
-              <td>
-                <%= item['name'] %>
-              </td>
-              <td>
-                <%= l(item['pkcs'].certificate.not_after.to_date, format: :long, locale: current_account.locale) %>
-              </td>
-              <td>
-                <% if item['status'] == 'default' %>
-                  <span class="badge badge-lg badge-info badge-outline">
-                    <%= t('default') %>
-                  </span>
-                <% elsif can?(:update, @encrypted_config) %>
-                  <%= button_to settings_esign_path, method: :put, params: { name: item['name'] }, class: 'btn btn-outline btn-neutral btn-xs whitespace-nowrap', title: t('make_default'), data: { turbo_confirm: t('are_you_sure_') } do %>
-                    <%= t('make_default') %>
-                  <% end %>
-                <% end %>
-              </td>
-              <td>
-                <% if item['name'] != EsignSettingsController::DEFAULT_CERT_NAME && item['status'] != 'default' &&  can?(:destroy, @encrypted_config) %>
-                  <%= button_to settings_esign_path, params: { name: item['name'] }, method: :delete, class: 'btn btn-outline btn-error btn-xs', title: t('remove'), data: { turbo_confirm: t('are_you_sure_') } do %>
-                    <%= t('remove') %>
-                  <% end %>
-                <% end %>
-              </td>
-            </tr>
-          <% end %>
-          <% unless Docuseal.multitenant? %>
-            <%= render 'default_signature_row' %>
-          <% end %>
-        </tbody>
+
       </table>
     </div>
     <% encrypted_config = EncryptedConfig.find_or_initialize_by(account: current_account, key: EncryptedConfig::TIMESTAMP_SERVER_URL_KEY) %>
@@ -182,3 +149,4 @@
     <% end %>
   </div>
 </div>
+

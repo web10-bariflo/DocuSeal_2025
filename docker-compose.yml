@@ -1,31 +1,84 @@
+# services:
+#   app:
+#     build:
+#       context: .
+#       dockerfile: Dockerfile
+#     ports:
+#       - 3000:3000
+#     environment:
+#       - RAILS_ENV=production
+#       - FORCE_SSL=false
+#       - DATABASE_URL=postgresql://Vertoxlabs:Vtx%40mru%40%235951%23new@bcpostgressqlserver12.postgres.database.azure.com:5432/Docuseal_dev?sslmode=require
+#       - SECRET_KEY_BASE=cb5f6450538b4146d525e2a10c913f22f1a032764cff4b5c048c69c51464a6d5d94a51a8e36db5e41536536a3c667f7880c9534894bf24cc1897d2558cb33a3b
+#       - RUN_MIGRATIONS=true
+#       - REDIS_URL=redis://redis:6379/0
+#       - LOCAL_REDIS_URL=
+#     volumes:
+#       - ./public:/app/public
+#     depends_on:
+#       - redis
+#     command: >
+#       bash -c "bundle exec rails assets:precompile && \
+#                bundle exec rails db:migrate RAILS_ENV=production && \
+#                bundle exec rails server -e production -b 0.0.0.0"
+#     restart: unless-stopped
+
+#   redis:
+#     image: redis:7-alpine
+#     restart: unless-stopped
+
+#   caddy:
+#     image: caddy:latest
+#     command: caddy reverse-proxy --from ${HOST:-localhost} --to app:3000
+#     ports:
+#       - 80:80
+#       - 443:443
+#       - 443:443/udp
+#     environment:
+#       - HOST=${HOST:-localhost}
+#     restart: unless-stopped
+
+
+
+
+
 services:
   app:
     build:
       context: .
       dockerfile: Dockerfile
-    depends_on:
-      postgres:
-        condition: service_healthy
     ports:
       - 3000:3000
     environment:
       - RAILS_ENV=production
-      - FORCE_SSL=${HOST}
-      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/docuseal
+      - FORCE_SSL=false
+      - DATABASE_URL=postgresql://docuseal:docuseal@postgres:5432/docuseal?sslmode=disable
+      - SECRET_KEY_BASE=4dce4f0685aa709f2ae930895ccb9d479700732d9f9a659aa3264af6c49de6390fb81b68aeb54dba66e44f634a93aca38555f739d96db34fb8a5d65f9
+      - RUN_MIGRATIONS=true
+      - REDIS_URL=redis://redis:6379/0
+      - LOCAL_REDIS_URL=
+    volumes:
+      - ./public:/app/public  # Ensures logo2.png is mounted
+    depends_on:
+      - postgres
+      - redis
+    command: >
+      bash -c "until pg_isready -h postgres -U docuseal -d docuseal; do sleep 1; done; \
+               bundle exec rails server -e production -b 0.0.0.0"
 
   postgres:
     image: postgres:15
-    volumes:
-      - ./pg_data:/var/lib/postgresql/data
+    restart: unless-stopped
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: docuseal
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
+      - POSTGRES_DB=docuseal
+      - POSTGRES_USER=docuseal
+      - POSTGRES_PASSWORD=docuseal
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
 
   caddy:
     image: caddy:latest
@@ -34,7 +87,10 @@ services:
       - 80:80
       - 443:443
       - 443:443/udp
-    volumes:
-      - ./caddy:/etc/caddy
+    # volumes:
+    #   - ./caddy:/etc/caddy
     environment:
       - HOST=${HOST}
+
+volumes:
+  pg_data:
