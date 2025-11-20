@@ -2,25 +2,42 @@ default: &default
   adapter: postgresql
   encoding: unicode
   pool: 20
-  sslmode: require
+  sslmode: disable
   connect_timeout: 10
   checkout_timeout: 10
 
+# development:
+#   <<: *default
+#   host: bcpostgressqlserver12.postgres.database.azure.com
+#   port: 5432
+#   database: Docuseal_dev
+#   username: Vertoxlabs
+#   password: "Vtx@mru@#5951#new"
+
+# test:
+#   <<: *default
+#   host: bcpostgressqlserver12.postgres.database.azure.com
+#   port: 5432
+#   database: Docuseal_test
+#   username: Vertoxlabs
+#   password: "Vtx@mru@#5951#new"
+
 development:
   <<: *default
-  host: bcpostgressqlserver12.postgres.database.azure.com
+  host: 192.168.1.140
   port: 5432
   database: Docuseal_dev
-  username: Vertoxlabs
-  password: "Vtx@mru@#5951#new"
+  username: vertoxl
+  password: "vertoxlabs"
 
 test:
   <<: *default
-  host: bcpostgressqlserver12.postgres.database.azure.com
+  host: 192.168.1.140
   port: 5432
   database: Docuseal_test
-  username: Vertoxlabs
-  password: "Vtx@mru@#5951#new"
+  username: vertoxl
+  password: "vertoxlabs"
+
 
 production:
   <<: *default
@@ -32,4 +49,3 @@ production:
   # password: "Vtx@mru@#5951#new"
   username: vertoxl
   password: "vertoxlabs"
-  sslmode: disable

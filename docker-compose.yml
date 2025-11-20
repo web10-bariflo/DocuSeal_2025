@@ -52,7 +52,8 @@ services:
     environment:
       - RAILS_ENV=production
       - FORCE_SSL=false
-      - DATABASE_URL=postgresql://docuseal:docuseal@postgres:5432/docuseal?sslmode=disable
+    #  - DATABASE_URL=postgresql://docuseal:docuseal@postgres:5432/docuseal?sslmode=disable
+      - DATABASE_URL=postgresql://vertoxl:vertoxlabs@192.168.1.140:5432/Docuseal_prod
       - SECRET_KEY_BASE=4dce4f0685aa709f2ae930895ccb9d479700732d9f9a659aa3264af6c49de6390fb81b68aeb54dba66e44f634a93aca38555f739d96db34fb8a5d65f9
       - RUN_MIGRATIONS=true
       - REDIS_URL=redis://redis:6379/0
@@ -60,21 +61,25 @@ services:
     volumes:
       - ./public:/app/public  # Ensures logo2.png is mounted
     depends_on:
-      - postgres
+    #  - postgres
       - redis
-    command: >
-      bash -c "until pg_isready -h postgres -U docuseal -d docuseal; do sleep 1; done; \
-               bundle exec rails server -e production -b 0.0.0.0"
+    # command: >
+      # bash -c "until pg_isready -h postgres -U docuseal -d docuseal; do sleep 1; done; \
+      #         bundle exec rails server -e production -b 0.0.0.0"
 
-  postgres:
-    image: postgres:15
-    restart: unless-stopped
-    environment:
-      - POSTGRES_DB=docuseal
-      - POSTGRES_USER=docuseal
-      - POSTGRES_PASSWORD=docuseal
-    volumes:
-      - pg_data:/var/lib/postgresql/data
+    command: >
+      bash -c "bundle exec rails server -e production -b 0.0.0.0"
+
+
+  # postgres:
+  #   image: postgres:15
+  #   restart: unless-stopped
+  #   environment:
+  #     - POSTGRES_DB=docuseal
+  #     - POSTGRES_USER=docuseal
+  #     - POSTGRES_PASSWORD=docuseal
+  #   volumes:
+  #     - pg_data:/var/lib/postgresql/data
 
   redis:
     image: redis:7-alpine
