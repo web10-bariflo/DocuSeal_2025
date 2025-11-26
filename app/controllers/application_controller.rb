@@ -134,4 +134,9 @@ class ApplicationController < ActionController::Base
     
     render plain: svg_content, content_type: 'image/svg+xml'
   end
+
+  def favicon
+    # Return 204 No Content for favicon requests to prevent 500 errors
+    head :no_content
+  end
 end

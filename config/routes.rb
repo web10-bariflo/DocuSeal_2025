@@ -4,6 +4,10 @@ Rails.application.routes.draw do
   mount LetterOpenerWeb::Engine, at: '/letter_opener' if Rails.env.development?
 
   get '/logo.svg', to: 'application#logo', defaults: { format: 'svg' }
+  get '/favicon-16x16.png', to: 'application#favicon', defaults: { format: 'png' }
+  get '/favicon-32x32.png', to: 'application#favicon', defaults: { format: 'png' }
+  get '/favicon-96x96.png', to: 'application#favicon', defaults: { format: 'png' }
+  get '/favicon.ico', to: 'application#favicon', defaults: { format: 'ico' }
 
   if !Docuseal.multitenant? && defined?(Sidekiq::Web)
     authenticated :user, ->(u) { u.sidekiq? } do
