@@ -42,44 +42,109 @@
 
 
 
+# services:
+#   app:
+#     build:
+#       context: .
+#       dockerfile: Dockerfile
+#     ports:
+#       - 3000:3000
+#     environment:
+#       - RAILS_ENV=production
+#       - FORCE_SSL=false
+#     #  - DATABASE_URL=postgresql://docuseal:docuseal@postgres:5432/docuseal?sslmode=disable
+#       - DATABASE_URL=postgresql://vertoxl:vertoxlabs@192.168.1.140:5432/Docuseal_prod
+#       - SECRET_KEY_BASE=4dce4f0685aa709f2ae930895ccb9d479700732d9f9a659aa3264af6c49de6390fb81b68aeb54dba66e44f634a93aca38555f739d96db34fb8a5d65f9
+#       - RUN_MIGRATIONS=true
+#       - REDIS_URL=redis://redis:6379/0
+#       - LOCAL_REDIS_URL=
+#       - ALLOW_PUBLIC_SIGNUP=true
+#     volumes:
+#       - ./public:/app/public  # Ensures logo2.png is mounted
+#     depends_on:
+#     #  - postgres
+#       - redis
+#     # command: >
+#       # bash -c "until pg_isready -h postgres -U docuseal -d docuseal; do sleep 1; done; \
+#       #         bundle exec rails server -e production -b 0.0.0.0"
+
+#     command: >
+#       bash -c "bundle exec rails server -e production -b 0.0.0.0"
+
+
+#   # postgres:
+#   #   image: postgres:15
+#   #   restart: unless-stopped
+#   #   environment:
+#   #     - POSTGRES_DB=docuseal
+#   #     - POSTGRES_USER=docuseal
+#   #     - POSTGRES_PASSWORD=docuseal
+#   #   volumes:
+#   #     - pg_data:/var/lib/postgresql/data
+
+#   redis:
+#     image: redis:7-alpine
+#     restart: unless-stopped
+
+#   caddy:
+#     image: caddy:latest
+#     command: caddy reverse-proxy --from $HOST --to app:3000
+#     ports:
+#       - 80:80
+#       - 443:443
+#       - 443:443/udp
+#     # volumes:
+#     #   - ./caddy:/etc/caddy
+#   environment:
+#     HOST: ${HOST}
+#     RAILS_ENV: "production"
+#     FORCE_SSL: "false"
+#     DATABASE_URL: "postgresql://vertoxl:vertoxlabs@192.168.1.140:5432/Docuseal_prod"
+#     SECRET_KEY_BASE: "4dce4f0685..."
+#     RUN_MIGRATIONS: "true"
+#     REDIS_URL: "redis://redis:6379/0"
+#     LOCAL_REDIS_URL: ""
+#     ALLOW_PUBLIC_SIGNUP: "true"
+#     DISABLE_SIGNUP: "false"
+#     SHOW_LOGIN_LINK_ON_SIGNUP: "true"
+#     SHOW_SIGNUP_LINK_ON_LOGIN: "true"
+
+
+
+# volumes:
+#   pg_data:
+
+
+# ******************************************      DOCKER COMPOSE FILE      ******************************************
+
+version: "3.9"
+
 services:
   app:
     build:
       context: .
       dockerfile: Dockerfile
     ports:
-      - 3000:3000
+      - "3000:3000"
     environment:
-      - RAILS_ENV=production
-      - FORCE_SSL=false
-    #  - DATABASE_URL=postgresql://docuseal:docuseal@postgres:5432/docuseal?sslmode=disable
-      - DATABASE_URL=postgresql://vertoxl:vertoxlabs@192.168.1.140:5432/Docuseal_prod
-      - SECRET_KEY_BASE=4dce4f0685aa709f2ae930895ccb9d479700732d9f9a659aa3264af6c49de6390fb81b68aeb54dba66e44f634a93aca38555f739d96db34fb8a5d65f9
-      - RUN_MIGRATIONS=true
-      - REDIS_URL=redis://redis:6379/0
-      - LOCAL_REDIS_URL=
+      RAILS_ENV: "production"
+      FORCE_SSL: "false"
+      DATABASE_URL: "postgresql://vertoxl:vertoxlabs@192.168.1.140:5432/Docuseal_prod"
+      SECRET_KEY_BASE: "4dce4f0685aa709f2ae930895ccb9d479700732d9f9a659aa3264af6c49de6390fb81b68aeb54dba66e44f634a93aca38555f739d96db34fb8a5d65f9"
+      RUN_MIGRATIONS: "true"
+      REDIS_URL: "redis://redis:6379/0"
+      LOCAL_REDIS_URL: ""
+      ALLOW_PUBLIC_SIGNUP: "true"
+      DISABLE_SIGNUP: "false"
+      SHOW_LOGIN_LINK_ON_SIGNUP: "true"
+      SHOW_SIGNUP_LINK_ON_LOGIN: "true"
     volumes:
-      - ./public:/app/public  # Ensures logo2.png is mounted
+      - ./public:/app/public
     depends_on:
-    #  - postgres
       - redis
-    # command: >
-      # bash -c "until pg_isready -h postgres -U docuseal -d docuseal; do sleep 1; done; \
-      #         bundle exec rails server -e production -b 0.0.0.0"
-
     command: >
       bash -c "bundle exec rails server -e production -b 0.0.0.0"
-
-
-  # postgres:
-  #   image: postgres:15
-  #   restart: unless-stopped
-  #   environment:
-  #     - POSTGRES_DB=docuseal
-  #     - POSTGRES_USER=docuseal
-  #     - POSTGRES_PASSWORD=docuseal
-  #   volumes:
-  #     - pg_data:/var/lib/postgresql/data
+    restart: unless-stopped
 
   redis:
     image: redis:7-alpine
@@ -87,16 +152,14 @@ services:
 
   caddy:
     image: caddy:latest
-    command: caddy reverse-proxy --from $HOST --to app:3000
+    command: caddy reverse-proxy --from ${HOST:-localhost} --to app:3000
     ports:
-      - 80:80
-      - 443:443
-      - 443:443/udp
-    # volumes:
-    #   - ./caddy:/etc/caddy
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
     environment:
-      - HOST=${HOST}
+      HOST: "${HOST:-localhost}"
+    restart: unless-stopped
 
 volumes:
   pg_data:
-

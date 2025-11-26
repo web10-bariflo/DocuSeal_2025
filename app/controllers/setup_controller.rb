@@ -71,6 +71,8 @@ class SetupController < ApplicationController
   end
 
   def ensure_first_user_not_created!
+    return if ENV['ALLOW_PUBLIC_SIGNUP'] == 'true'
+
     redirect_to new_user_session_path, notice: I18n.t('please_sign_in') if User.exists?
   end
 end

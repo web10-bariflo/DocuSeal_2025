@@ -67,4 +67,7 @@
       <%= f.button button_title, class: 'base-button' %>
     </div>
   <% end %>
+  <div class="text-center mt-4">
+    <%= link_to t('already_have_an_account'), new_user_session_path({ lang: params[:lang] }.compact_blank), class: 'link link-hover' %>
+  </div>
 </div>
