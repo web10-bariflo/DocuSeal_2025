@@ -39,6 +39,7 @@ class DashboardController < ApplicationController
   def maybe_render_landing
     return if signed_in?
 
-    render 'pages/landing'
+    # Render a simple login form that posts to Devise
+    @user = User.new
   end
 end

@@ -337,7 +337,7 @@ en: &en
   but_not_activated: but not activated
   email_has_been_sent: Email has been sent.
   email_has_been_sent_already: Email has been sent already.
-  initial_setup: Initial Setup
+  initial_setup: Create New Account
   demo_environment: Demo Environment
   close: Close
   upgrade: Upgrade

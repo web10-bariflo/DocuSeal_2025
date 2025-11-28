@@ -101,6 +101,7 @@ class ApplicationController < ActionController::Base
   end
 
   def maybe_redirect_to_setup
+    return if request.path == '/'
     redirect_to setup_index_path unless User.exists?
   end
 

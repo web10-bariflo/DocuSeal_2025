@@ -1,3 +1,6 @@
+<%# Don't show the "You need to sign in or sign up before continuing" message %>
+<% flash_message = flash[:notice] || flash[:alert] %>
+<% if flash_message && flash_message != 'You need to sign in or sign up before continuing.' %>
 <div id="flash" class="absolute top-0 w-full h-0 z-20">
   <div class="max-w-xl mx-auto mt-1.5">
     <div class="px-4 py-3 rounded-2xl bg-base-200 flex items-center justify-between mx-4 md:mx-0">
@@ -8,10 +11,11 @@
           <%= svg_icon('exclamation_circle', class: 'stroke-error flex-none w-6 h-6') %>
         <% end %>
         <div>
-          <span><%= flash[:notice] || flash[:alert] %></span>
+          <span><%= flash_message %></span>
         </div>
       </div>
       <a href="#" onclick="[event.preventDefault(), window.flash.remove()]" class="mr-1">&times;</a>
     </div>
   </div>
 </div>
+<% end %>
