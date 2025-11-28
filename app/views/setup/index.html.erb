@@ -68,6 +68,6 @@
     </div>
   <% end %>
   <div class="text-center mt-4">
-    <%= link_to t('already_have_an_account'), new_user_session_path({ lang: params[:lang] }.compact_blank), class: 'link link-hover' %>
+    <span><%= t('already_have_an_account') %> <%= link_to t('sign_in'), new_user_session_path({ lang: params[:lang] }.compact_blank), class: 'link link-hover font-semibold' %></span>
   </div>
 </div>
