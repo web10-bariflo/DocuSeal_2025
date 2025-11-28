@@ -138,8 +138,8 @@ services:
       DISABLE_SIGNUP: "false"
       SHOW_LOGIN_LINK_ON_SIGNUP: "true"
       SHOW_SIGNUP_LINK_ON_LOGIN: "true"
-    volumes:
-      - ./public:/app/public
+    # volumes:
+    #   - ./public:/app/public
     depends_on:
       - redis
     command: >
